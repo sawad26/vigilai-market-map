@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AI Governance & Monitoring Market Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFBFC;
+  --surface: #FFFFFF;
+  --text: #1a1a2e;
+  --text-secondary: #5a5a7a;
+  --border: #E2E4E9;
+  --accent: #1B4965;
+  --accent-light: #CAE9FF;
+  --seg1: #1B4965;
+  --seg2: #5FA8D3;
+  --seg3: #9B8CB7;
+  --seg4: #62929E;
+  --vamos: #D4A843;
+  --full: #1B6B3A;
+  --partial: #B8860B;
+  --none: #9CA3AF;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117; --surface: #1a1c25; --text: #E8E8ED; --text-secondary: #9898B0;
+    --border: #2E303A; --accent: #62B6DE; --accent-light: #1B3444;
+    --full: #4ADE80; --partial: #EAB308; --none: #6B7280;
+    --seg1: #62B6DE; --seg2: #7EC8EB; --seg3: #C4B8DA; --seg4: #8FBBC5;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117; --surface: #1a1c25; --text: #E8E8ED; --text-secondary: #9898B0;
+  --border: #2E303A; --accent: #62B6DE; --accent-light: #1B3444;
+  --full: #4ADE80; --partial: #EAB308; --none: #6B7280;
+  --seg1: #62B6DE; --seg2: #7EC8EB; --seg3: #C4B8DA; --seg4: #8FBBC5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+.container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+header { margin-bottom: 2.5rem; }
+header h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; }
+header .subtitle { font-size: 0.9rem; color: var(--text-secondary); }
+
+/* Primary tabs */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+.tab { padding: 0.75rem 1.25rem; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.view-panel { display: none; }
+.view-panel.active { display: block; }
+
+/* Segment sub-tabs */
+.seg-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.seg-tab { padding: 0.45rem 0.9rem; font-size: 0.78rem; font-weight: 600; border: 1.5px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
+.seg-tab:hover { border-color: var(--text-secondary); }
+.seg-tab.active-s1 { background: #1B496515; border-color: var(--seg1); color: var(--seg1); }
+.seg-tab.active-s2 { background: #5FA8D315; border-color: var(--seg2); color: var(--seg2); }
+.seg-tab.active-s3 { background: #9B8CB715; border-color: var(--seg3); color: var(--seg3); }
+.seg-tab.active-s4 { background: #62929E15; border-color: var(--seg4); color: var(--seg4); }
+.seg-panel { display: none; }
+.seg-panel.active { display: block; }
+
+.seg-badge { display: inline-block; font-size: 0.65rem; font-weight: 600; padding: 0.12rem 0.4rem; border-radius: 3px; letter-spacing: 0.02em; vertical-align: middle; }
+.seg-1 { background: #1B496518; color: var(--seg1); }
+.seg-2 { background: #5FA8D318; color: var(--seg2); }
+.seg-3 { background: #9B8CB718; color: var(--seg3); }
+.seg-4 { background: #62929E18; color: var(--seg4); }
+
+/* Matrix */
+.matrix-intro { font-size: 0.88rem; color: var(--text-secondary); max-width: 720px; margin-bottom: 1.25rem; line-height: 1.65; }
+.matrix-wrapper { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
+.matrix-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.matrix-table thead th { padding: 0.65rem 0.6rem; font-weight: 600; font-size: 0.72rem; text-align: center; border-bottom: 2px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 2; white-space: nowrap; vertical-align: bottom; }
+.matrix-table thead th:first-child { text-align: left; padding-left: 1rem; min-width: 220px; position: sticky; left: 0; z-index: 3; }
+.matrix-table thead th.vig-col { background: #D4A84310; border-left: 2px solid var(--vamos); border-right: 2px solid var(--vamos); }
+.matrix-table tbody tr { border-bottom: 1px solid var(--border); }
+.matrix-table tbody tr:last-child { border-bottom: none; }
+.matrix-table tbody td { padding: 0.6rem 0.6rem; text-align: center; vertical-align: middle; }
+.matrix-table tbody td:first-child { text-align: left; padding-left: 1rem; font-weight: 500; font-size: 0.78rem; position: sticky; left: 0; background: var(--surface); z-index: 1; }
+.matrix-table tbody td.vig-col { background: #D4A84308; border-left: 2px solid var(--vamos); border-right: 2px solid var(--vamos); }
+.th-sub { display: block; font-weight: 400; font-size: 0.6rem; color: var(--text-secondary); margin-top: 2px; }
+.th-seg { display: block; margin-top: 4px; }
+
+/* Circle icons */
+.ci { display: inline-block; width: 16px; height: 16px; vertical-align: middle; }
+.ci-full { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.5' fill='%231B6B3A'/%3E%3C/svg%3E") no-repeat center/contain; }
+.ci-half { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%23B8860B' stroke-width='1.2'/%3E%3Cpath d='M8 2 A6 6 0 0 0 8 14 Z' fill='%23B8860B'/%3E%3C/svg%3E") no-repeat center/contain; }
+.ci-empty { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%239CA3AF' stroke-width='1.3'/%3E%3C/svg%3E") no-repeat center/contain; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ci-full { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.5' fill='%234ADE80'/%3E%3C/svg%3E"); }
+  :root:not([data-theme="light"]) .ci-half { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%23EAB308' stroke-width='1.2'/%3E%3Cpath d='M8 2 A6 6 0 0 0 8 14 Z' fill='%23EAB308'/%3E%3C/svg%3E"); }
+  :root:not([data-theme="light"]) .ci-empty { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%236B7280' stroke-width='1.3'/%3E%3C/svg%3E"); }
+}
+.cl { display: block; font-size: 0.63rem; color: var(--text-secondary); margin-top: 2px; }
+
+/* Legend */
+.legend { display: flex; gap: 1.5rem; margin-bottom: 1.25rem; font-size: 0.78rem; color: var(--text-secondary); flex-wrap: wrap; align-items: center; }
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+
+/* Insight cards */
+.insights { margin-top: 1.5rem; }
+.insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.15rem 1.4rem; margin-bottom: 0.75rem; }
+.insight-card h3 { font-size: 0.84rem; font-weight: 600; margin-bottom: 0.35rem; }
+.insight-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; max-width: 700px; }
+.also-eval { font-size: 0.78rem; color: var(--text-secondary); margin-top: 1rem; line-height: 1.6; max-width: 700px; }
+.also-eval strong { color: var(--text); font-weight: 600; }
+
+/* Radar chart */
+.radar-container { display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; }
+.radar-chart-wrap { flex: 1; min-width: 400px; max-width: 600px; }
+.radar-chart-wrap canvas { width: 100% !important; height: auto !important; }
+.radar-legend { flex: 0 0 300px; }
+.radar-legend-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+.radar-legend-item:last-child { border-bottom: none; }
+.radar-swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; margin-top: 3px; }
+.radar-legend-name { font-weight: 600; font-size: 0.82rem; }
+.radar-legend-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; margin-top: 2px; }
+.radar-intro { font-size: 0.9rem; color: var(--text-secondary); max-width: 720px; margin-bottom: 2rem; line-height: 1.65; }
+
+.source-note { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.72rem; color: var(--text-secondary); line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .container { padding: 1.25rem 1rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .radar-container { flex-direction: column; }
+  .radar-chart-wrap { min-width: 100%; }
+  .radar-legend { flex: 1; }
+  .tab { padding: 0.6rem 0.8rem; font-size: 0.78rem; }
+  .seg-tab { padding: 0.4rem 0.65rem; font-size: 0.72rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>AI Governance & Monitoring: Market Map</h1>
+    <p class="subtitle">Where VigilAI (the commercial layer built on the VAMOS open standard) sits, what the gap is, and why incumbents can't close it. Prepared for the VAMOS Collaborative, October 2026.</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-view="matrix" onclick="switchView('matrix')">Capability Matrix</button>
+    <button class="tab" data-view="radar" onclick="switchView('radar')">Positioning Chart</button>
+  </nav>
+
+  <!-- ========== MATRIX VIEW ========== -->
+  <div id="matrix" class="view-panel active">
+    <p class="matrix-intro">
+      32 companies evaluated across four segments. Each tab below shows VigilAI against every company in that segment, scored on nine capabilities that matter to a governance committee. Rows are ordered by differentiation: the top three are where VigilAI stands alone.
+    </p>
+
+    <div class="legend">
+      <div class="legend-item"><span class="ci ci-full"></span> Core capability</div>
+      <div class="legend-item"><span class="ci ci-half"></span> Partial or generic</div>
+      <div class="legend-item"><span class="ci ci-empty"></span> Absent</div>
+      <div class="legend-item" style="margin-left:auto; font-style:italic; font-size:0.75rem;">Gold column = VigilAI</div>
+    </div>
+
+    <nav class="seg-tabs">
+      <button class="seg-tab active-s1" data-seg="s1" onclick="switchSeg('s1')">S1: Healthcare Pure-Play</button>
+      <button class="seg-tab" data-seg="s2" onclick="switchSeg('s2')">S2: Sector-Agnostic</button>
+      <button class="seg-tab" data-seg="s3" onclick="switchSeg('s3')">S3: Consulting / Advisory</button>
+      <button class="seg-tab" data-seg="s4" onclick="switchSeg('s4')">S4: Platform Bolt-On</button>
+    </nav>
+
+    <!-- ===== S1: Healthcare Pure-Play ===== -->
+    <div id="s1" class="seg-panel active">
+      <div class="matrix-wrapper">
+        <table class="matrix-table">
+          <thead><tr>
+            <th>Capability</th>
+            <th class="vig-col">VigilAI<span class="th-sub">(Anticipated Capabilities)</span></th>
+            <th>Vitea<span class="th-sub">VC (undiscl.)</span></th>
+            <th>Signal 1<span class="th-sub">$10M seed</span></th>
+            <th>Ferrum Health<span class="th-sub">$37M raised</span></th>
+            <th>ALIGNMT AI<span class="th-sub">$6.5M seed</span></th>
+            <th>Onboard AI<span class="th-sub">$5M SAFE</span></th>
+            <th>Polysight<span class="th-sub">$1M pre-seed</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Cross-institutional benchmarking</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">VigilAI Network</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Community-governed standard</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">AMCs govern</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td></tr>
+            <tr><td>Open, inspectable methodology</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Apache 2.0 OSS</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td></tr>
+            <tr><td>Fairness & equity monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core, clinical</span></td><td><span class="ci ci-empty"></span><span class="cl">Not prominent</span></td><td><span class="ci ci-half"></span><span class="cl">Risk-tiered</span></td><td><span class="ci ci-half"></span><span class="cl">Safety checks</span></td><td><span class="ci ci-full"></span><span class="cl">Assessment tool</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Continuous post-deployment monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Observability Lens</span></td><td><span class="ci ci-half"></span><span class="cl">Compliance focus</span></td><td><span class="ci ci-empty"></span><span class="cl">Pre-deploy focus</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Drift detection</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Continuous</span></td><td><span class="ci ci-full"></span><span class="cl">Risk-tiered alerts</span></td><td><span class="ci ci-full"></span><span class="cl">AUROC + drift</span></td><td><span class="ci ci-empty"></span><span class="cl">Not primary</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Clinical governance workflows</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Policy engine</span></td><td><span class="ci ci-full"></span><span class="cl">Intake + registry</span></td><td><span class="ci ci-half"></span><span class="cl">Deploy-focused</span></td><td><span class="ci ci-full"></span><span class="cl">Compliance</span></td><td><span class="ci ci-full"></span><span class="cl">Intake/approval</span></td><td><span class="ci ci-empty"></span><span class="cl">Reg. intel only</span></td></tr>
+            <tr><td>Vendor-agnostic</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">By design</span></td><td><span class="ci ci-full"></span><span class="cl">Any AI app</span></td><td><span class="ci ci-full"></span><span class="cl">Any AI tool</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any AI system</span></td><td><span class="ci ci-full"></span><span class="cl">Vendor vetting</span></td><td><span class="ci ci-full"></span><span class="cl">Any regulation</span></td></tr>
+            <tr><td>Regulatory alignment</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core design goal</span></td><td><span class="ci ci-half"></span><span class="cl">100+ policies</span></td><td><span class="ci ci-half"></span><span class="cl">Compliance features</span></td><td><span class="ci ci-half"></span><span class="cl">FDA device context</span></td><td><span class="ci ci-full"></span><span class="cl">CHAI certified</span></td><td><span class="ci ci-half"></span><span class="cl">Partial</span></td><td><span class="ci ci-full"></span><span class="cl">Core product</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insights">
+        <div class="insight-card"><h3>What this segment shows</h3><p>Six companies are attempting healthcare-specific AI governance as their core product. None are building a cross-institutional standard. Signal 1 is the most complete platform in this segment: AI intake and review, an AI registry (single source of truth for all AI in use), post-deployment monitoring with risk-tiered observability and automated alerts, agent management, and portfolio impact dashboards. Customers include NewYork-Presbyterian, Mount Sinai Health System (seven hospital campuses, Icahn School of Medicine), Inova, and Trillium Health Partners (Canada). Two of those four are major AMCs, which puts Signal 1 inside the exact institutional profile the VAMOS Collaborative targets. 37 employees on $10M raised ($50M post-money). Mount Sinai's CDTO described the problem Signal 1 solves as monitoring "performance, safety, and impact at scale" across imaging, generative AI, and agent-based systems. That is nearly identical to the problem statement VigilAI uses. Signal 1 is not waiting for a standard to form. They are selling now, into AMCs, against the same pain point, with a working product. Ferrum Health is the most mature company in this segment by funding ($37M) and deployed footprint (Sutter Health, Allina Health, Carle Health, 45M+ lives across 400+ care sites). Their Observability Lens tracks live AUROC, drift, and safety checks, which is close to continuous algorithmovigilance. CEO is a physician (Pelu Tran, MD, Stanford, co-founded Augmedix). But Ferrum is also a deployment platform (Model Hub, Deployment Fabric), which blurs their positioning. Vitea is the other strong direct competitor (continuous monitoring, governance workflows, Hartford HealthCare and Mercyhealth contracts, CEO who built and exited Jvion). ALIGNMT is compliance and assessment-first with CHAI certification. Onboard is pre-deployment vetting. Polysight is regulatory intelligence. The weakness shared by every company in this segment is the same: proprietary product, no open standard, no multi-institutional governance, no cross-site benchmarking, no peer-reviewed intellectual framework. VigilAI is the only entry that covers all nine capabilities.</p></div>
+      </div>
+    </div>
+
+    <!-- ===== S2: Sector-Agnostic ===== -->
+    <div id="s2" class="seg-panel">
+      <div class="matrix-wrapper">
+        <table class="matrix-table">
+          <thead><tr>
+            <th>Capability</th>
+            <th class="vig-col">VigilAI<span class="th-sub">(Anticipated Capabilities)</span></th>
+            <th>Fiddler AI<span class="th-sub">$68M</span></th>
+            <th>Arize AI<span class="th-sub">$62M</span></th>
+            <th>Arthur AI<span class="th-sub">$60M</span></th>
+            <th>Credo AI<span class="th-sub">$41M</span></th>
+            <th>Monitaur<span class="th-sub">$13M</span></th>
+            <th>WhyLabs<span class="th-sub">~$10M</span></th>
+            <th>Evidently AI<span class="th-sub">OSS + seed</span></th>
+            <th>Openlayer<span class="th-sub">Undisclosed</span></th>
+            <th>ModelOp<span class="th-sub">Undisclosed</span></th>
+            <th>Holistic AI<span class="th-sub">Series A est.</span></th>
+            <th>Fairly AI<span class="th-sub">Undisclosed</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Cross-institutional benchmarking</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">VigilAI Network</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Community-governed standard</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">AMCs govern</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-half"></span><span class="cl">OSS community</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td></tr>
+            <tr><td>Open, inspectable methodology</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Apache 2.0 OSS</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-half"></span><span class="cl">Phoenix OSS</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-half"></span><span class="cl">whylogs OSS</span></td><td><span class="ci ci-full"></span><span class="cl">Full OSS core</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td></tr>
+            <tr><td>Fairness & equity monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core, clinical</span></td><td><span class="ci ci-half"></span><span class="cl">Generic bias</span></td><td><span class="ci ci-half"></span><span class="cl">Generic bias</span></td><td><span class="ci ci-half"></span><span class="cl">Generic bias</span></td><td><span class="ci ci-empty"></span><span class="cl">Policy only</span></td><td><span class="ci ci-half"></span><span class="cl">Partial</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">AI bias auditing</span></td><td><span class="ci ci-half"></span><span class="cl">Continuous</span></td></tr>
+            <tr><td>Continuous post-deployment monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-empty"></span><span class="cl">Policy layer</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-half"></span><span class="cl">Partial</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td></tr>
+            <tr><td>Drift detection</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-half"></span><span class="cl">Partial</span></td><td><span class="ci ci-full"></span><span class="cl">Core</span></td></tr>
+            <tr><td>Clinical governance workflows</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">GRC + CHAI</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Lifecycle mgmt</span></td><td><span class="ci ci-half"></span><span class="cl">GRC generic</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Vendor-agnostic</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">By design</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any AI system</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td></tr>
+            <tr><td>Regulatory alignment</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core design goal</span></td><td><span class="ci ci-half"></span><span class="cl">Generic compliance</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Generic compliance</span></td><td><span class="ci ci-full"></span><span class="cl">EU AI Act + CHAI</span></td><td><span class="ci ci-half"></span><span class="cl">Insurance focus</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Gartner listed</span></td><td><span class="ci ci-half"></span><span class="cl">Generic GRC</span></td><td><span class="ci ci-half"></span><span class="cl">EU AI Act</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insights">
+        <div class="insight-card"><h3>What this segment shows</h3><p>These companies have real monitoring technology: drift detection, model observability, performance tracking. Several have $60M+ in funding. But look at the top half of the grid. None have cross-institutional benchmarking, none are community-governed, and clinical governance workflows are absent across the board. These are tools for ML engineers, not for governance committees. The most notable movement toward healthcare: Credo AI formalized a partnership with CHAI in April 2026, explicitly positioning as the AI governance platform for healthcare. Openlayer was a HIMSS 2026 exhibitor and is named in the 2026 Gartner Market Guide for AI Evaluation and Observability. Both signals suggest horizontal platforms are eyeing healthcare, but neither has named health system customers yet. A health system could buy Fiddler for its data science team and still need VAMOS for its governance committee. They solve different problems for different buyers.</p></div>
+      </div>
+
+    </div>
+
+    <!-- ===== S3: Consulting / Advisory ===== -->
+    <div id="s3" class="seg-panel">
+      <div class="matrix-wrapper">
+        <table class="matrix-table">
+          <thead><tr>
+            <th>Capability</th>
+            <th class="vig-col">VigilAI<span class="th-sub">(Anticipated Capabilities)</span></th>
+            <th>Deloitte / McKinsey /<br>Accenture<span class="th-sub">Big 3 advisory</span></th>
+            <th>Guidehouse /<br>Chartis<span class="th-sub">HC-specific advisory</span></th>
+            <th>ECRI<span class="th-sub">Safety research org</span></th>
+            <th>Manatt Health<span class="th-sub">Policy advisory</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Cross-institutional benchmarking</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">VigilAI Network</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Safety data aggregation</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Community-governed standard</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">AMCs govern</span></td><td><span class="ci ci-empty"></span><span class="cl">Advisory only</span></td><td><span class="ci ci-empty"></span><span class="cl">Advisory only</span></td><td><span class="ci ci-half"></span><span class="cl">Partnership model</span></td><td><span class="ci ci-empty"></span><span class="cl">Advisory only</span></td></tr>
+            <tr><td>Open, inspectable methodology</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Apache 2.0 OSS</span></td><td><span class="ci ci-empty"></span><span class="cl">Custom frameworks</span></td><td><span class="ci ci-empty"></span><span class="cl">Custom frameworks</span></td><td><span class="ci ci-half"></span><span class="cl">Published research</span></td><td><span class="ci ci-empty"></span><span class="cl">Policy analysis</span></td></tr>
+            <tr><td>Fairness & equity monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core, clinical</span></td><td><span class="ci ci-half"></span><span class="cl">Framework recs</span></td><td><span class="ci ci-half"></span><span class="cl">Framework recs</span></td><td><span class="ci ci-half"></span><span class="cl">Safety lens</span></td><td><span class="ci ci-half"></span><span class="cl">Policy lens</span></td></tr>
+            <tr><td>Continuous post-deployment monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-empty"></span><span class="cl">Advisory only</span></td><td><span class="ci ci-empty"></span><span class="cl">Advisory only</span></td><td><span class="ci ci-empty"></span><span class="cl">Research only</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Drift detection</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-empty"></span><span class="cl">Advisory only</span></td><td><span class="ci ci-empty"></span><span class="cl">Advisory only</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Clinical governance workflows</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-full"></span><span class="cl">Custom builds</span></td><td><span class="ci ci-full"></span><span class="cl">Custom builds</span></td><td><span class="ci ci-half"></span><span class="cl">Templates</span></td><td><span class="ci ci-half"></span><span class="cl">Policy guidance</span></td></tr>
+            <tr><td>Vendor-agnostic</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">By design</span></td><td><span class="ci ci-full"></span><span class="cl">Vendor-neutral</span></td><td><span class="ci ci-full"></span><span class="cl">Vendor-neutral</span></td><td><span class="ci ci-full"></span><span class="cl">Vendor-neutral</span></td><td><span class="ci ci-full"></span><span class="cl">Vendor-neutral</span></td></tr>
+            <tr><td>Regulatory alignment</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core design goal</span></td><td><span class="ci ci-full"></span><span class="cl">Core advisory</span></td><td><span class="ci ci-full"></span><span class="cl">Core advisory</span></td><td><span class="ci ci-full"></span><span class="cl">Core mission</span></td><td><span class="ci ci-full"></span><span class="cl">Core practice</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insights">
+        <div class="insight-card"><h3>What this segment shows</h3><p>Consulting firms can build governance frameworks and advise on regulatory alignment. That's real value. But they don't ship monitoring software. Every engagement produces a custom deliverable that doesn't scale, can't be shared across institutions, and requires another engagement to update. ECRI is the most interesting player here: their safety research and multi-stakeholder partnership model make them a potential VAMOS validation partner rather than a competitor. The core distinction: advisory firms create demand for governance tooling. VigilAI is the tooling.</p></div>
+      </div>
+      <p class="also-eval"><strong>Also active in this space:</strong> Accenture, PwC/KPMG, EY, Huron, and Sg2 (Vizient). All advisory practices with varying degrees of AI governance capability. None ship product.</p>
+    </div>
+
+    <!-- ===== S4: Platform Bolt-On ===== -->
+    <div id="s4" class="seg-panel">
+      <div class="matrix-wrapper">
+        <table class="matrix-table">
+          <thead><tr>
+            <th>Capability</th>
+            <th class="vig-col">VigilAI<span class="th-sub">(Anticipated Capabilities)</span></th>
+            <th>Qualified<br>Health<span class="th-sub">$255M raised</span></th>
+            <th>Penguin AI<span class="th-sub">$25M Series A</span></th>
+            <th>Epic<br>Seismometer<span class="th-sub">OSS validation</span></th>
+            <th>Epic<br>Agent Factory<span class="th-sub">2027 GA</span></th>
+            <th>Health<br>Catalyst<span class="th-sub">Analytics platform</span></th>
+            <th>Databricks /<br>MLflow<span class="th-sub">ML lifecycle</span></th>
+            <th>AWS / Azure /<br>GCP<span class="th-sub">Cloud ML monitors</span></th>
+            <th>IBM watsonx<br>.governance<span class="th-sub">Public co.</span></th>
+            <th>Oracle<br>Health<span class="th-sub">$28B Cerner acq.</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Cross-institutional benchmarking</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">VigilAI Network</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td></tr>
+            <tr><td>Community-governed standard</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">AMCs govern</span></td><td><span class="ci ci-empty"></span><span class="cl">VC-backed co.</span></td><td><span class="ci ci-empty"></span><span class="cl">VC-backed co.</span></td><td><span class="ci ci-half"></span><span class="cl">OSS, no governance</span></td><td><span class="ci ci-empty"></span><span class="cl">Epic-controlled</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-half"></span><span class="cl">MLflow OSS</span></td><td><span class="ci ci-empty"></span><span class="cl">Platform feature</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td><td><span class="ci ci-empty"></span><span class="cl">Vendor product</span></td></tr>
+            <tr><td>Open, inspectable methodology</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Apache 2.0 OSS</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-full"></span><span class="cl">OSS on GitHub</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-half"></span><span class="cl">MLflow OSS</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td><td><span class="ci ci-empty"></span><span class="cl">Proprietary</span></td></tr>
+            <tr><td>Fairness & equity monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core, clinical</span></td><td><span class="ci ci-empty"></span><span class="cl">Not prominent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Demographic splits</span></td><td><span class="ci ci-empty"></span><span class="cl">Unknown</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Generic bias</span></td><td><span class="ci ci-empty"></span><span class="cl">Unknown</span></td></tr>
+            <tr><td>Continuous post-deployment monitoring</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-half"></span><span class="cl">Platform feature</span></td><td><span class="ci ci-half"></span><span class="cl">Own agents only</span></td><td><span class="ci ci-empty"></span><span class="cl">Point-in-time</span></td><td><span class="ci ci-half"></span><span class="cl">Agent monitoring</span></td><td><span class="ci ci-half"></span><span class="cl">Analytics</span></td><td><span class="ci ci-half"></span><span class="cl">Feature</span></td><td><span class="ci ci-half"></span><span class="cl">Feature</span></td><td><span class="ci ci-full"></span><span class="cl">Core feature</span></td><td><span class="ci ci-half"></span><span class="cl">Emerging</span></td></tr>
+            <tr><td>Drift detection</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-half"></span><span class="cl">Partial</span></td><td><span class="ci ci-empty"></span><span class="cl">Not declared</span></td><td><span class="ci ci-empty"></span><span class="cl">Point-in-time</span></td><td><span class="ci ci-empty"></span><span class="cl">Unknown</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-full"></span><span class="cl">Feature</span></td><td><span class="ci ci-full"></span><span class="cl">Feature</span></td><td><span class="ci ci-full"></span><span class="cl">Core feature</span></td><td><span class="ci ci-empty"></span><span class="cl">Unknown</span></td></tr>
+            <tr><td>Clinical governance workflows</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core</span></td><td><span class="ci ci-half"></span><span class="cl">Embedded</span></td><td><span class="ci ci-empty"></span><span class="cl">Audit trails only</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Embedded</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">Risk tracking</span></td><td><span class="ci ci-half"></span><span class="cl">Emerging</span></td></tr>
+            <tr><td>Vendor-agnostic</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">By design</span></td><td><span class="ci ci-half"></span><span class="cl">Platform models</span></td><td><span class="ci ci-empty"></span><span class="cl">Own workflows</span></td><td><span class="ci ci-full"></span><span class="cl">Claimed</span></td><td><span class="ci ci-empty"></span><span class="cl">Epic agents only</span></td><td><span class="ci ci-half"></span><span class="cl">HC analytics</span></td><td><span class="ci ci-full"></span><span class="cl">Any model</span></td><td><span class="ci ci-empty"></span><span class="cl">Own cloud only</span></td><td><span class="ci ci-half"></span><span class="cl">Non-IBM models</span></td><td><span class="ci ci-empty"></span><span class="cl">Oracle ecosystem</span></td></tr>
+            <tr><td>Regulatory alignment</td><td class="vig-col"><span class="ci ci-full"></span><span class="cl">Core design goal</span></td><td><span class="ci ci-half"></span><span class="cl">Compliance features</span></td><td><span class="ci ci-half"></span><span class="cl">HIPAA, audit trails</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Unknown</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-empty"></span><span class="cl">Absent</span></td><td><span class="ci ci-half"></span><span class="cl">EU AI Act focus</span></td><td><span class="ci ci-half"></span><span class="cl">Emerging</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insights">
+        <div class="insight-card"><h3>What this segment shows</h3><p>These are the "why can't we just use what we already have?" answers. Qualified Health ($255M, backed by NEA and Anthropic) is the largest company on this map, but it's an AI deployment platform with monitoring as a feature, not an independent monitoring standard. Its governance covers models deployed through its own platform, not a vendor-agnostic standard for all algorithms. Penguin AI ($25M, Snowflake Ventures) is a model-creation platform whose CEO talks publicly about governance as a strategic priority, but has not declared independent model monitoring as a product. As a model creator, Penguin self-monitoring its own algorithms would create an inherent conflict of interest, the same structural problem that makes independent pharmacovigilance necessary in drug safety. Its models would themselves be subject to VAMOS monitoring at any institution running both. Epic Seismometer is open-source and healthcare-specific, but does point-in-time validation, not continuous monitoring. Agent Factory (2027) will govern Epic-built agents but not third-party models. IBM watsonx.governance has real monitoring and drift detection capabilities (it's one of the stronger horizontal enterprise tools), but it's a generic platform with no clinical governance layer. Oracle Health is building AI-first EHR features with embedded governance, but like Epic, it monitors its own ecosystem, not a vendor-agnostic standard. Collaborative members running Oracle/Cerner should expect governance features to emerge as platform-native capabilities over the next 12 to 18 months. The same structural limitation applies to all of them: a vendor monitoring its own AI is not an independent standard. None produce cross-institutional benchmarks or standardized algorithmovigilance.</p></div>
+      </div>
+      <p class="also-eval"><strong>Also evaluated:</strong> Weights & Biases (experiment tracking, not post-deployment monitoring). Innovaccer Gravity (data/AI platform with governance features, similar structural position to Qualified Health).</p>
+    </div>
+  </div>
+
+  <!-- ========== RADAR VIEW ========== -->
+  <div id="radar" class="view-panel">
+    <p class="radar-intro">
+      Each axis represents a capability dimension scored 0 to 5 based on product depth, healthcare specificity, and evidence of deployment. VigilAI is the only shape that extends to the outer ring on every axis. Six companies are shown: the strongest competitors from each relevant segment.
+    </p>
+    <div class="radar-container">
+      <div class="radar-chart-wrap">
+        <canvas id="radarCanvas" width="560" height="560"></canvas>
+      </div>
+      <div class="radar-legend">
+        <div class="radar-legend-item">
+          <div class="radar-swatch" style="background: #D4A843;"></div>
+          <div><div class="radar-legend-name">VigilAI</div><div class="radar-legend-desc">Built on VAMOS, the open-source algorithmovigilance standard. AMC-governed Collaborative. Apache 2.0. Peer-reviewed framework. Cross-institutional benchmarking via the VigilAI Network.</div></div>
+        </div>
+        <div class="radar-legend-item">
+          <div class="radar-swatch" style="background: #E07A5F;"></div>
+          <div><div class="radar-legend-name">Signal 1</div><div class="radar-legend-desc">$10M raised, $50M post-money. Toronto-based. Most complete healthcare AI management platform in S1: intake, registry, post-deployment monitoring with risk-tiered observability, agent management, portfolio dashboards. NewYork-Presbyterian, Mount Sinai, Inova, Trillium customers. 37 employees. Selling into AMCs now against the same pain point. Proprietary, no open standard, no cross-site benchmarking.</div></div>
+        </div>
+        <div class="radar-legend-item">
+          <div class="radar-swatch" style="background: #C97C5D;"></div>
+          <div><div class="radar-legend-name">Ferrum Health</div><div class="radar-legend-desc">$37M raised, $44.5M post-money. Most mature S1 company by funding and footprint. Observability Lens tracks live AUROC, drift, safety. Sutter Health, Allina Health, Carle Health, 400+ care sites, 45M+ lives. Also a deployment platform (Model Hub). Proprietary, no open standard.</div></div>
+        </div>
+        <div class="radar-legend-item">
+          <div class="radar-swatch" style="background: #E84855;"></div>
+          <div><div class="radar-legend-name">Qualified Health</div><div class="radar-legend-desc">$255M raised (PitchBook). AI deployment platform with embedded governance, now in S4 (monitoring tied to own deployment platform). Backed by NEA, Anthropic, Intermountain Ventures, Frist Cressey.</div></div>
+        </div>
+        <div class="radar-legend-item">
+          <div class="radar-swatch" style="background: #3185FC;"></div>
+          <div><div class="radar-legend-name">Vitea</div><div class="radar-legend-desc">Healthcare AI governance platform. Proprietary. Hartford HealthCare and Mercyhealth customers. Most direct product competitor. Early Stage VC from EPIC Ventures, June 2026 (PitchBook). CEO Shantanu Nigam co-founded Jvion (9-figure PE exit).</div></div>
+        </div>
+        <div class="radar-legend-item">
+          <div class="radar-swatch" style="background: #46B980;"></div>
+          <div><div class="radar-legend-name">Fiddler AI</div><div class="radar-legend-desc">$68M raised. ML observability for regulated industries. Strong drift detection and explainability. No healthcare governance workflows, no clinical fairness frameworks, no named health system customers.</div></div>
+        </div>
+        <div class="radar-legend-item">
+          <div class="radar-swatch" style="background: #9B8CB7;"></div>
+          <div><div class="radar-legend-name">Epic Seismometer</div><div class="radar-legend-desc">Open-source validation cookbook. Point-in-time model evaluation with demographic splits. No continuous monitoring, no governance workflows, no cross-site data.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="insights" style="margin-top: 2.5rem;">
+      <div class="insight-card"><h3>Reading the chart</h3><p>The gold VigilAI shape is the only one that reaches the outer ring on every axis. Signal 1 comes closest: strong on monitoring, governance, and drift, but drops to zero on open methodology, cross-site benchmarking, and community governance. That's the structural gap no proprietary product can close. Qualified Health scores low on monitoring and benchmarking because governance is a platform feature, not its core product. Fiddler scores high on drift detection but drops to near-zero on clinical governance and healthcare specificity. Epic Seismometer has open methodology but no continuous monitoring or governance workflows.</p></div>
+      <div class="insight-card"><h3>Why the gap is structurally defensible</h3><p>Filling the entire radar requires two things venture capital cannot buy: institutional legitimacy (AMCs co-governing through executed LOIs) and intellectual provenance (Peter Embi's peer-reviewed algorithmovigilance framework). Qualified Health has raised $255M (PitchBook-verified) and still cannot convene a governance coalition or claim to have originated the field. Vitea's CEO built and exited Jvion for 9 figures and still can't replicate the Collaborative. Those are structural moats.</p></div>
+    </div>
+  </div>
+
+  <p class="source-note">
+    Funding data sourced from PitchBook (primary) and cross-referenced with CB Insights, Crunchbase, and SEC filings as of October 22, 2026. Capability assessments based on published product documentation, named customer announcements, and PitchBook company descriptions. Key PitchBook findings: Qualified Health total raised $255M ($30M seed Oct 2024, $100M Series A Mar 2026, $125M Series B Jul 2026); Signal 1 $10M seed at $50M post-money (Inovia Capital, Apr 2022); Vitea confirmed Early Stage VC from EPIC Ventures Jun 2026; ALIGNMT AI $6.5M seed Jul 2025 at $34M post-money; Onboard AI $5M SAFE Nov 2025.
+  </p>
+</div>
+
+<script>
+function switchView(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-view="${id}"]`).classList.add('active');
+  document.getElementById(id).classList.add('active');
+  if (id === 'radar') drawRadar();
+}
+
+function switchSeg(id) {
+  const segClasses = ['active-s1','active-s2','active-s3','active-s4'];
+  document.querySelectorAll('.seg-tab').forEach(t => { segClasses.forEach(c => t.classList.remove(c)); });
+  document.querySelectorAll('.seg-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-seg="${id}"]`).classList.add('active-' + id);
+  document.getElementById(id).classList.add('active');
+}
+
+function drawRadar() {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const size = Math.min(canvas.parentElement.clientWidth, 560);
+  canvas.width = size * dpr; canvas.height = size * dpr;
+  canvas.style.width = size + 'px'; canvas.style.height = size + 'px';
+  ctx.scale(dpr, dpr);
+  const cx = size/2, cy = size/2, maxR = size*0.38, levels = 5;
+  const axes = ['Continuous\nMonitoring','Fairness &\nEquity','Governance\nWorkflows','Drift\nDetection','Vendor-\nAgnostic','Open\nMethodology','Cross-Site\nBenchmarking','Regulatory\nAlignment'];
+  const n = axes.length, angleStep = (2*Math.PI)/n, startAngle = -Math.PI/2;
+  const companies = [
+    { name:'VigilAI', color:'#D4A843', data:[5,5,5,5,5,5,5,5], lw:2.5 },
+    { name:'Signal 1', color:'#E07A5F', data:[5,2,5,4,5,0,0,2], lw:1.5 },
+    { name:'Ferrum Health', color:'#C97C5D', data:[5,2,2,5,5,0,0,2], lw:1.5 },
+    { name:'Qualified Health', color:'#E84855', data:[2,1,2,2,2,0,0,2], lw:1.5 },
+    { name:'Vitea', color:'#3185FC', data:[5,1,5,4,5,0,0,3], lw:1.5 },
+    { name:'Fiddler AI', color:'#46B980', data:[5,2,0,5,5,0,0,2], lw:1.5 },
+    { name:'Epic Seismometer', color:'#9B8CB7', data:[1,2,0,1,4,5,0,0], lw:1.5 },
+  ];
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+  const labelColor = isDark ? '#9898B0' : '#5a5a7a';
+  const levelColor = isDark ? '#6B7280' : '#9CA3AF';
+  ctx.clearRect(0,0,size,size);
+  for (let l=1;l<=levels;l++){const r=(maxR/levels)*l;ctx.beginPath();for(let i=0;i<=n;i++){const a=startAngle+angleStep*(i%n);const x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=gridColor;ctx.lineWidth=1;ctx.stroke();}
+  for(let i=0;i<n;i++){const a=startAngle+angleStep*i;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+maxR*Math.cos(a),cy+maxR*Math.sin(a));ctx.strokeStyle=gridColor;ctx.lineWidth=1;ctx.stroke();}
+  ctx.font='500 11px Inter, sans-serif';ctx.fillStyle=labelColor;ctx.textAlign='center';ctx.textBaseline='middle';
+  for(let i=0;i<n;i++){const a=startAngle+angleStep*i;const lr=maxR+32;const lx=cx+lr*Math.cos(a),ly=cy+lr*Math.sin(a);const lines=axes[i].split('\n');lines.forEach((line,li)=>{ctx.fillText(line,lx,ly+(li-(lines.length-1)/2)*13);});}
+  [1,2,3,4,5,6,0].forEach(ci=>{const c=companies[ci];ctx.beginPath();for(let i=0;i<=n;i++){const idx=i%n;const a=startAngle+angleStep*idx;const r=(maxR/levels)*c.data[idx];const x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=c.color;ctx.lineWidth=c.lw;ctx.stroke();ctx.fillStyle=c.color+(ci===0?'20':'10');ctx.fill();});
+  ctx.font='400 9px Inter, sans-serif';ctx.fillStyle=levelColor;ctx.textAlign='right';
+  for(let l=1;l<=levels;l++){const r=(maxR/levels)*l;ctx.fillText(l.toString(),cx-6,cy-r+3);}
+}
+window.addEventListener('load',()=>{if(document.getElementById('radar').classList.contains('active'))drawRadar();});
+window.addEventListener('resize',()=>{if(document.getElementById('radar').classList.contains('active'))drawRadar();});
+</script>
+</body>
+</html>
